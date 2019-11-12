@@ -1,0 +1,47 @@
+---
+title: "HW8"
+output: github_document
+---
+
+Directions: Your final github repository should contain 1) the .Rmd file and 2) a HTML file (make sure to commit both!). Also, please make sure that your code chunk for each question is visible in the HTML document, and that all warning messages are removed. Please do not include unnecessary and lengthy output, or points will be taken off. Please check your HTML file to make sure it is complete with all of your answers. The assignment is due on Thursday November 21st, at midnight.
+
+## Question 1.
+
+### Part A: 
+Load the mouse cortex data. Calculate the fano factor for all of the genes, and then select the genes with a fano factor greater than 35.
+
+```{r, echo=FALSE}
+load(file="C:/Users/Nina/Documents/1-NYU/TA Materials/Intro to Biostats & EDA 2019/Datasets/cortex_data.RData")
+center_cortex <- cortex_data- rowMeans(cortex_data)
+fano = apply(cortex_data,1,var)/rowMeans(cortex_data)
+fano_genes = names(which(fano>35))
+```
+
+### Part B: 
+Center the cortex data. Perform NMF on the selected genes from the centered data, using a rank of 10. Plot a heatmap of the basis matrix. 
+
+```{r, echo=FALSE, eval=FALSE}
+library(NMF, quietly=TRUE)
+library(fastICA, quietly=TRUE)
+library(ComplexHeatmap, quietly=TRUE, )
+NMF_rank = 10
+center_cortex[center_cortex < 0]=0
+results = nmf(center_cortex[fano_genes,], rank = NMF_rank, seed = 'ica', method = 'nsNMF')
+Basis_matrix= basis(results)
+Heatmap(Basis_matrix, row_names_gp = gpar(cex=0.3))
+```
+
+## Question 2.
+
+### Part A:
+Repeat the steps of Q1 part B above, but now using a rank of 5. 
+
+```{r, echo=FALSE, eval=FALSE}
+NMF_rank = 5
+results2 = nmf(center_cortex[fano_genes,], rank = NMF_rank, seed = 'ica', method = 'nsNMF')
+Basis_matrix2= basis(results2)
+Heatmap(Basis_matrix2, row_names_gp = gpar(cex=0.3))
+```
+
+### Part B:
+Intepret the heatmap in part A (explain what the basis matrix is and what it means). Compare it to the heatmap in part B and explain the difference.
