@@ -23,4 +23,4 @@ Repeat the steps of Q1 part B above, but now using a rank of 5.
 
 ### Part B:
 
-Intepret the heatmap in part A (explain what the basis matrix is and what it means). Compare it to the heatmap in part B and explain the difference.
+Intepret the heatmap in part A (explain what the basis matrix is and what it means). Compare it to the heatmap in Q1 part B and explain the difference.

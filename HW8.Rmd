@@ -44,4 +44,4 @@ Heatmap(Basis_matrix2, row_names_gp = gpar(cex=0.3))
 ```
 
 ### Part B:
-Intepret the heatmap in part A (explain what the basis matrix is and what it means). Compare it to the heatmap in part B and explain the difference.
+Intepret the heatmap in part A (explain what the basis matrix is and what it means). Compare it to the heatmap in Q1 part B and explain the difference.
