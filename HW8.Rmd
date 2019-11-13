@@ -45,3 +45,34 @@ Heatmap(Basis_matrix2, row_names_gp = gpar(cex=0.3))
 
 ### Part B:
 Intepret the heatmap in part A (explain what the basis matrix is and what it means). Compare it to the heatmap in Q1 part B and explain the difference.
+
+
+## Question 3.
+Load the pancreas data and clean. Calculate the fano factor for all of the genes, and then select the genes with a fano factor greater than 20.
+```{r}
+P = read.csv("~/Pancreas_dataset_gene_expression.csv", header=FALSE)
+P = P[!duplicated(P[,1]),]
+rownames(P) = P[,1]
+P = P[, -1]
+P = log10(1+P)
+
+
+fano = apply(P,1,var)/rowMeans(P)
+fano_genes = names(which(fano>20))
+
+```
+
+## Question 4.
+Center the pancreas data. Perform NMF on the selected genes from the centered data, using a rank of 20. Plot a heatmap of the basis matrix. 
+```{r}
+NMF_rank = 20
+P_centered = P-rowMeans(P)
+P_centered[P_centered < 0] = 0
+res_cen = nmf(P_centered[fano_genes,], rank = NMF_rank, seed = 'ica', method = 'nsNMF')
+
+Basis_matrix = basis(res)
+Heatmap(Basis_matrix, row_names_gp = gpar(cex=0.3))
+
+Coef_matrix = coef(res)
+names(which(Basis_matrix[,1]>.05))
+```
