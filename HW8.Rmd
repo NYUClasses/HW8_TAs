@@ -49,8 +49,8 @@ Intepret the heatmap in part A (explain what the basis matrix is and what it mea
 
 ## Question 3.
 Load the pancreas data and clean. Calculate the fano factor for all of the genes, and then select the genes with a fano factor greater than 20.
-```{r}
-P = read.csv("~/Pancreas_dataset_gene_expression.csv", header=FALSE)
+```{r, echo=FALSE, eval=FALSE}
+P = read.csv("Pancreas_dataset_gene_expression.csv", header=FALSE)
 P = P[!duplicated(P[,1]),]
 rownames(P) = P[,1]
 P = P[, -1]
@@ -64,7 +64,7 @@ fano_genes = names(which(fano>20))
 
 ## Question 4.
 Center the pancreas data. Perform NMF on the selected genes from the centered data, using a rank of 20. Plot a heatmap of the basis matrix. 
-```{r}
+```{r, echo=FALSE, eval=FALSE}
 NMF_rank = 20
 P_centered = P-rowMeans(P)
 P_centered[P_centered < 0] = 0
@@ -72,18 +72,20 @@ res_cen = nmf(P_centered[fano_genes,], rank = NMF_rank, seed = 'ica', method = '
 
 Basis_matrix = basis(res)
 Heatmap(Basis_matrix, row_names_gp = gpar(cex=0.3))
-
-Coef_matrix = coef(res)
-names(which(Basis_matrix[,1]>.05))
 ```
 
 ## Question 5. 
-Plot a heatmap of the coefficient matrix. Exlain how the basis matrix and the coefficient matrix relates to one another. 
+Plot a heatmap of the coefficient matrix. Explain how the basis matrix and the coefficient matrix relate to one another. 
+```{r, echo=FALSE, eval=FALSE}
+Coef_matrix = coef(res)
+Heatmap(Coef_matrix, row_names_gp = gpar(cex=0.3))
+names(which(Basis_matrix[,1]>.05))
+```
 
 ## Question 6. 
 Perform PCA on the Pancreas data from Question 3. Plot a biplot using the first two PCs. Which genes contribute most to PC1 and PC2?
 
-```{r}
+```{r, echo=FALSE, eval=FALSE}
 pancreas_gene_expression <- read_csv("/Users/ay1392/Desktop/Pancreas_dataset_gene_expression.csv", 
                                      col_names = FALSE) 
 
@@ -96,21 +98,21 @@ pancreas_cell_id <- pancreas_cell_id + 1
 pancreas_cell_id_key <- read_csv("/Users/ay1392/Desktop/Pancreas_dataset_cell_id_key.csv",
                              col_names = FALSE)
 ```
-```{r}
+```{r, echo=FALSE, eval=FALSE}
 pancreas_gene_expression <- pancreas_gene_expression %>% 
   # There are some weird number genes that are duplicated 
   # so I use the make.names function to make the gene names unique
   mutate(X1 = make.names(X1, unique = TRUE)) %>% 
   column_to_rownames("X1")
 ```
-```{r}
+```{r, echo=FALSE, eval=FALSE}
 pancreas_cell_id$X2 <- pancreas_cell_id$X1
 
 for(i in 1:length(pancreas_cell_id_key$X1)) {
   pancreas_cell_id$X1 <- ifelse(pancreas_cell_id$X1 == pancreas_cell_id_key$X1[i], pancreas_cell_id_key$X2[i], pancreas_cell_id$X1)
 }
 ```
-```{r}
+```{r, echo=FALSE, eval=FALSE}
 out <- prcomp(t(pancreas_gene_expression[1:200,]))
 plot(out$x[,1],out$x[,2])
 biplot(out)
