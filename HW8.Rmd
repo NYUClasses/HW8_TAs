@@ -76,3 +76,42 @@ Heatmap(Basis_matrix, row_names_gp = gpar(cex=0.3))
 Coef_matrix = coef(res)
 names(which(Basis_matrix[,1]>.05))
 ```
+
+## Question 5. 
+Plot a heatmap of the coefficient matrix. Exlain how the basis matrix and the coefficient matrix relates to one another. 
+
+## Question 6. 
+Perform PCA on the Pancreas data from Question 3. Plot a biplot using the first two PCs. Which genes contribute most to PC1 and PC2?
+
+```{r}
+pancreas_gene_expression <- read_csv("/Users/ay1392/Desktop/Pancreas_dataset_gene_expression.csv", 
+                                     col_names = FALSE) 
+
+pancreas_cell_id <- read_csv("/Users/ay1392/Desktop/Pancreas_dataset_cell_id.csv",
+                             col_names = FALSE)
+
+# indexed by 0. Change to index by 1
+pancreas_cell_id <- pancreas_cell_id + 1
+
+pancreas_cell_id_key <- read_csv("/Users/ay1392/Desktop/Pancreas_dataset_cell_id_key.csv",
+                             col_names = FALSE)
+```
+```{r}
+pancreas_gene_expression <- pancreas_gene_expression %>% 
+  # There are some weird number genes that are duplicated 
+  # so I use the make.names function to make the gene names unique
+  mutate(X1 = make.names(X1, unique = TRUE)) %>% 
+  column_to_rownames("X1")
+```
+```{r}
+pancreas_cell_id$X2 <- pancreas_cell_id$X1
+
+for(i in 1:length(pancreas_cell_id_key$X1)) {
+  pancreas_cell_id$X1 <- ifelse(pancreas_cell_id$X1 == pancreas_cell_id_key$X1[i], pancreas_cell_id_key$X2[i], pancreas_cell_id$X1)
+}
+```
+```{r}
+out <- prcomp(t(pancreas_gene_expression[1:200,]))
+plot(out$x[,1],out$x[,2])
+biplot(out)
+```
